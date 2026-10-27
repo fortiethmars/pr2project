@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сотрудники — Мама Птица</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<dialog id="employeeDialog" class="employee-dialog">
+  <form id="employeeForm">
+    <h2>Добавить сотрудника</h2>
+    <p>Заполни данные нового сотрудника.</p>
+
+    <label for="employeeName">ФИО *</label>
+    <input class="field" id="employeeName" name="full_name"
+           maxlength="250" required>
+
+    <label for="employeeType">Тип сотрудника *</label>
+    <select class="select" id="employeeType" name="type_id" required></select>
+
+    <label for="employeeDepartment">Подразделение *</label>
+    <select class="select" id="employeeDepartment"
+            name="department_id" required></select>
+
+    <label for="employeeManager">Руководитель *</label>
+    <select class="select" id="employeeManager" name="manager_id" required></select>
+
+    <label for="employeeRooms">Доступные помещения *</label>
+    <select class="select" id="employeeRooms" name="room_ids"
+            multiple size="5"></select>
+    <small>Чтобы выбрать несколько помещений, удерживай Ctrl.</small>
+
+    <label for="employeeOffice">Рабочий кабинет</label>
+    <select class="select" id="employeeOffice" name="office_room_id">
+      <option value="">Не назначен</option>
+    </select>
+
+    <label class="employee-checkbox">
+      <input type="checkbox" id="employeeRoot">
+      Руководитель организации
+    </label>
+
+    <p id="employeeFormError" role="alert"></p>
+
+    <div class="employee-form-actions">
+      <button type="button" class="btn btn-light" id="cancelEmployeeBtn">
+        Отмена
+      </button>
+      <button type="submit" class="btn btn-primary">
+        Сохранить сотрудника
+      </button>
+    </div>
+  </form>
+</dialog>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">0_0</div>
+      <div><div class="brand-title">Мама Птица</div><div class="brand-sub">Управление предприятием</div></div>
+    </a>
+    <div class="nav-label">Рабочее пространство</div>
+    <nav class="nav"><a class="" href="index.html"><span class="nav-icon">⌂</span>Главная</a>
+<a class="active" href="employees.html"><span class="nav-icon">♙</span>Сотрудники</a>
+<a class="" href="departments.html"><span class="nav-icon">▦</span>Подразделения</a>
+<a class="" href="rooms.html"><span class="nav-icon">▣</span>Помещения</a>
+<a class="" href="work-time.html"><span class="nav-icon">◷</span>Рабочее время</a>
+<a class="" href="reports.html"><span class="nav-icon">▤</span>Отчёты</a></nav>
+    <div class="sidebar-bottom">
+      <div class="help-card"><strong>Нужна помощь?</strong><p>Интерфейс управления предприятием.</p><a href="reports.html">Перейти к отчётам →</a></div>
+      <div class="profile"><div class="avatar">ВШ</div><div><div class="profile-name">Всеволод Шарыгин</div><div class="profile-role">Менеджер</div></div></div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div class="breadcrumb">Рабочее пространство&nbsp; / &nbsp;<strong>Сотрудники</strong></div>
+      <div class="top-actions"><div class="search-top">⌕ &nbsp; Поиск по системе</div><button class="icon-button" aria-label="Уведомления">♧</button><div class="avatar">ВШ</div></div>
+    </header>
+    <div class="content">
+      
+<div class="page-heading"><div><div class="eyebrow">Персонал</div><h1>Сотрудники</h1><p class="subtitle">Список сотрудников, их должности и принадлежность к подразделениям.</p></div><button class="btn btn-primary" id="addEmployeeBtn">
+  ＋ Добавить сотрудника
+</button></div>
+<div class="stats">
+  <div class="stat-card"><div class="stat-top">Всего сотрудников <span class="stat-icon">♙</span></div><div class="stat-value">—</div><div class="stat-foot">Данные из базы данных</div></div>
+  <div class="stat-card"><div class="stat-top">Руководители <span class="stat-icon">♔</span></div><div class="stat-value">—</div><div class="stat-foot">По данным о подчинённых</div></div>
+  <div class="stat-card"><div class="stat-top">На работе сегодня <span class="stat-icon">◷</span></div><div class="stat-value">—</div><div class="stat-foot">По учёту рабочего времени</div></div>
+  <div class="stat-card"><div class="stat-top">Подразделения <span class="stat-icon">▦</span></div><div class="stat-value">—</div><div class="stat-foot">Данные из базы данных</div></div>
+</div>
+<section class="panel"><div class="toolbar"><div class="toolbar-left"><input class="field field-search" placeholder="⌕  Поиск сотрудника..."><select class="select"><option value="">Все подразделения</option></select><select class="select"><option value="">Все типы</option></select></div><div><button class="btn btn-light">⇩ Экспорт</button></div></div>
+<div class="table-wrap"><table><thead><tr><th>Сотрудник</th><th>Тип</th><th>Подразделение</th><th>Начальник</th><th>Помещения / доступы</th><th>Статус</th><th></th></tr></thead><tbody></tbody></table></div><p class="empty-note">Сотрудники появятся после подключения к базе данных.</p></section>
+
+      <div class="footer-note">Мама Птица</div>
+    </div>
+  </main>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const tbody = document.querySelector("table tbody");
+  const emptyNote = document.querySelector(".empty-note");
+  const search = document.querySelector(".field-search");
+  const selects = document.querySelectorAll(".toolbar .select");
+  const statValues = document.querySelectorAll(".stats .stat-value");
+
+  let employees = [];
+  let departments = [];
+  let employeeTypes = [];
+  let rooms = [];
+
+  const escapeHtml = (value) =>
+    String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+
+  async function getJson(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Ошибка загрузки ${url}: HTTP ${response.status}`);
+    }
+    return response.json();
+  }
+
+  function renderEmployees() {
+    const query = search.value.trim().toLocaleLowerCase("ru");
+    const departmentId = selects[0]?.value ?? "";
+    const typeId = selects[1]?.value ?? "";
+
+    const filtered = employees.filter((employee) => {
+      const department = departments.find(
+        (item) => item.id === employee.department_id
+      );
+      const type = employeeTypes.find(
+        (item) => item.id === employee.type_id
+      );
+      const manager = employees.find(
+        (item) => item.id === employee.manager_id
+      );
+
+      const searchable = [
+        employee.full_name,
+        department?.name,
+        type?.name,
+        manager?.full_name
+      ].join(" ").toLocaleLowerCase("ru");
+
+      return searchable.includes(query)
+        && (!departmentId || String(employee.department_id) === departmentId)
+        && (!typeId || String(employee.type_id) === typeId);
+    });
+
+    tbody.innerHTML = filtered.map((employee) => {
+      const department = departments.find(
+        (item) => item.id === employee.department_id
+      );
+      const type = employeeTypes.find(
+        (item) => item.id === employee.type_id
+      );
+      const manager = employees.find(
+        (item) => item.id === employee.manager_id
+      );
+      const office = rooms.find(
+        (item) => item.id === employee.office_room_id
+      );
+
+      const roomText = office
+        ? `Кабинет: ${office.name}`
+        : "Кабинет не назначен";
+
+      return `
+        <tr>
+          <td>${escapeHtml(employee.full_name)}</td>
+          <td>${escapeHtml(type?.name ?? "—")}</td>
+          <td>${escapeHtml(department?.name ?? "—")}</td>
+          <td>${escapeHtml(manager?.full_name ?? (employee.is_root_manager ? "Руководитель организации" : "—"))}</td>
+          <td>${escapeHtml(roomText)}</td>
+          <td><span class="status-badge">Нет отметки</span></td>
+          <td></td>
+        </tr>
+      `;
+    }).join("");
+
+    emptyNote.hidden = filtered.length > 0;
+    emptyNote.textContent = filtered.length
+      ? ""
+      : employees.length
+        ? "По заданным фильтрам сотрудники не найдены."
+        : "В базе данных пока нет сотрудников.";
+  }
+
+  function fillSelect(select, items, placeholder) {
+    select.innerHTML =
+      `<option value="">${placeholder}</option>` +
+      items.map((item) =>
+        `<option value="${item.id}">${escapeHtml(item.name)}</option>`
+      ).join("");
+  }
+
+  try {
+    const [employeeData, departmentData, typeData, roomData] =
+      await Promise.all([
+        getJson("/api/employees"),
+        getJson("/api/departments"),
+        getJson("/api/reference/employee-types"),
+        getJson("/api/rooms")
+      ]);
+
+    employees = employeeData;
+    departments = departmentData;
+    employeeTypes = typeData;
+    rooms = roomData;
+
+    fillSelect(selects[0], departments, "Все подразделения");
+    fillSelect(selects[1], employeeTypes, "Все типы");
+
+    statValues[0].textContent = employees.length;
+    statValues[1].textContent = new Set(
+      employees.filter((employee) => employee.manager_id != null)
+        .map((employee) => employee.manager_id)
+    ).size;
+    statValues[2].textContent = "—";
+    statValues[3].textContent = departments.length;
+
+    search.addEventListener("input", renderEmployees);
+    selects.forEach((select) =>
+      select.addEventListener("change", renderEmployees)
+    );
+
+    renderEmployees();
+    
+const dialog = document.getElementById("employeeDialog");
+const employeeForm = document.getElementById("employeeForm");
+const formError = document.getElementById("employeeFormError");
+
+const nameInput = document.getElementById("employeeName");
+const typeSelect = document.getElementById("employeeType");
+const departmentSelect = document.getElementById("employeeDepartment");
+const managerSelect = document.getElementById("employeeManager");
+const roomsSelect = document.getElementById("employeeRooms");
+const officeSelect = document.getElementById("employeeOffice");
+const rootCheckbox = document.getElementById("employeeRoot");
+
+function fillEmployeeSelect(select, items, placeholder) {
+  select.innerHTML =
+    `<option value="">${placeholder}</option>` +
+    items.map(item =>
+      `<option value="${item.id}">${escapeHtml(item.name ?? item.full_name)}</option>`
+    ).join("");
+}
+
+function updateManagerOptions() {
+  const isRoot = rootCheckbox.checked;
+
+  managerSelect.disabled = isRoot;
+  managerSelect.required = !isRoot;
+
+  fillEmployeeSelect(
+    managerSelect,
+    employees,
+    isRoot ? "Не требуется" : "Выберите руководителя"
+  );
+
+  if (isRoot) {
+    managerSelect.value = "";
+  }
+}
+
+function updateOfficeOptions() {
+  const allowedRoomIds = Array.from(roomsSelect.selectedOptions)
+    .map(option => Number(option.value));
+
+  const previousValue = officeSelect.value;
+
+  officeSelect.innerHTML =
+    '<option value="">Не назначен</option>' +
+    rooms
+      .filter(room => allowedRoomIds.includes(room.id))
+      .map(room =>
+        `<option value="${room.id}">${escapeHtml(room.name)}</option>`
+      ).join("");
+
+  if (allowedRoomIds.includes(Number(previousValue))) {
+    officeSelect.value = previousValue;
+  }
+}
+
+document.getElementById("addEmployeeBtn").addEventListener("click", () => {
+  employeeForm.reset();
+  formError.textContent = "";
+
+  fillEmployeeSelect(typeSelect, employeeTypes, "Выберите тип");
+  fillEmployeeSelect(departmentSelect, departments, "Выберите подразделение");
+  fillEmployeeSelect(roomsSelect, rooms, "Выберите доступные помещения");
+  updateManagerOptions();
+  updateOfficeOptions();
+
+  dialog.showModal();
+});
+
+document.getElementById("cancelEmployeeBtn").addEventListener("click", () => {
+  dialog.close();
+});
+
+rootCheckbox.addEventListener("change", updateManagerOptions);
+roomsSelect.addEventListener("change", updateOfficeOptions);
+
+employeeForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  formError.textContent = "";
+
+  const roomIds = Array.from(roomsSelect.selectedOptions)
+    .map(option => Number(option.value));
+
+  const officeRoomId = officeSelect.value
+    ? Number(officeSelect.value)
+    : null;
+
+  const isRoot = rootCheckbox.checked;
+  const managerId = managerSelect.value
+    ? Number(managerSelect.value)
+    : null;
+
+  if (!roomIds.length) {
+    formError.textContent = "Выбери хотя бы одно доступное помещение.";
+    return;
+  }
+
+  if (!isRoot && managerId === null) {
+    formError.textContent = "У обычного сотрудника должен быть руководитель.";
+    return;
+  }
+
+  if (officeRoomId !== null && !roomIds.includes(officeRoomId)) {
+    formError.textContent =
+      "Рабочий кабинет должен входить в список доступных помещений.";
+    return;
+  }
+
+  const payload = {
+    full_name: nameInput.value.trim(),
+    type_id: Number(typeSelect.value),
+    department_id: Number(departmentSelect.value),
+    manager_id: managerId,
+    office_room_id: officeRoomId,
+    is_root_manager: isRoot,
+    room_ids: roomIds
+  };
+
+  try {
+    const response = await fetch("/api/employees", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const detail = result.detail;
+      throw new Error(
+        typeof detail === "string"
+          ? detail
+          : JSON.stringify(detail ?? `HTTP ${response.status}`)
+      );
+    }
+
+    employees = await getJson("/api/employees");
+
+    dialog.close();
+    renderEmployees();
+
+    statValues[0].textContent = employees.length;
+    statValues[1].textContent = new Set(
+      employees.filter(employee => employee.manager_id != null)
+        .map(employee => employee.manager_id)
+    ).size;
+  } catch (error) {
+    formError.textContent = `Не удалось сохранить сотрудника: ${error.message}`;
+  }
+});
+
+  } catch (error) {
+    console.error("Не удалось загрузить данные сотрудников:", error);
+    emptyNote.hidden = false;
+    emptyNote.textContent =
+      "Не удалось загрузить данные. Проверьте, что сервер запущен, и посмотрите ошибку в консоли браузера.";
+  }
+});
+</script>
+</body>
+</html>
+</body>
+</html>

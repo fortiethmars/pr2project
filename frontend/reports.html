@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Отчёты — Мама Птица</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="index.html">
+      <div class="brand-mark">0_0</div>
+      <div><div class="brand-title">Мама Птица</div><div class="brand-sub">Управление предприятием</div></div>
+    </a>
+    <div class="nav-label">Рабочее пространство</div>
+    <nav class="nav"><a class="" href="index.html"><span class="nav-icon">⌂</span>Главная</a>
+<a class="" href="employees.html"><span class="nav-icon">♙</span>Сотрудники</a>
+<a class="" href="departments.html"><span class="nav-icon">▦</span>Подразделения</a>
+<a class="" href="rooms.html"><span class="nav-icon">▣</span>Помещения</a>
+<a class="" href="work-time.html"><span class="nav-icon">◷</span>Рабочее время</a>
+<a class="active" href="reports.html"><span class="nav-icon">▤</span>Отчёты</a></nav>
+    <div class="sidebar-bottom">
+      <div class="help-card"><strong>Нужна помощь?</strong><p>Интерфейс управления предприятием.</p><a href="reports.html">Перейти к отчётам →</a></div>
+      <div class="profile"><div class="avatar">ВШ</div><div><div class="profile-name">Всеволод Шарыгин</div><div class="profile-role">Менеджер</div></div></div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div class="breadcrumb">Рабочее пространство&nbsp; / &nbsp;<strong>Отчёты</strong></div>
+      <div class="top-actions"><div class="search-top">⌕ &nbsp; Поиск по системе</div><button class="icon-button" aria-label="Уведомления">♧</button><div class="avatar">ВШ</div></div>
+    </header>
+    <div class="content">
+      
+<div class="page-heading"><div><div class="eyebrow">Аналитика</div><h1>Отчёты</h1><p class="subtitle">Формирование выборок по сотрудникам, доступам и отработанному времени.</p></div><button class="btn btn-light">История отчётов</button></div>
+
+<div class="grid-2">
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <h2>Параметры отчёта</h2>
+        <p>Настройте условия отбора</p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <label>
+        Подразделение
+        <select class="select">
+          <option value="">Все подразделения</option>
+        </select>
+      </label>
+
+      <label>
+        Помещения для проверки доступа
+        <select class="select">
+          <option value="">Выберите помещения из базы данных</option>
+        </select>
+      </label>
+
+      <label>
+        Минимум подчинённых
+        <input class="field" type="number" min="0" placeholder="Введите значение">
+      </label>
+
+      <label>
+        Минимум отработанных часов за месяц
+        <input class="field" type="number" min="0" placeholder="Введите значение">
+      </label>
+
+      <label class="report-checkbox">
+        <input type="checkbox">
+        Проверять доступ минимум к двум помещениям
+      </label>
+
+      <label class="report-checkbox">
+        <input type="checkbox">
+        Учитывать последний календарный месяц
+      </label>
+    </div>
+
+    <button class="btn btn-primary">▤ Сформировать отчёт</button>
+    <p class="empty-note">Фильтры начнут работать после подключения серверной логики.</p>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <div>
+        <h2>Результаты отчёта</h2>
+        <p>Результаты будут сформированы по данным базы данных.</p>
+      </div>
+      <button class="btn btn-light">⇩ Скачать</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-top">Найдено сотрудников</div>
+        <div class="stat-value">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">Среднее часов за месяц</div>
+        <div class="stat-value">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">Среднее подчинённых</div>
+        <div class="stat-value">—</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Сотрудник</th>
+            <th>Подразделение</th>
+            <th>Подчинённые</th>
+            <th>Доступы</th>
+            <th>Часы / мес.</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <p class="empty-note">Результаты отчёта пока отсутствуют.</p>
+  </section>
+</div>
+      <div class="footer-note">Мама Птица</div>
+    </div>
+  </main>
+</div>
+<script src="/static/js/reports.js"></script>
+</body>
+</html>
